@@ -2,7 +2,7 @@ export type WidgetConfig = {
   width: string;
   height: string;
 };
-
+//класс для построения конфигурации виджета, который может быть расширен в будущем для добавления новых параметров
 export class WidgetBuilder {
     private config: WidgetConfig = {
         width: '300',
