@@ -1,50 +1,59 @@
 import { expect, Page } from '@playwright/test';
 import { WidgetConfig } from '../builders/widget.builder';
-//класс для взаимодействия со страницей виджета, который инкапсулирует все действия, связанные с настройкой и генерацией виджета
+
 export class WidgetPage {
     constructor(private readonly page: Page) {}
-//локатор для контейнера виджета, который находится внутри iframe, и позволяет взаимодействовать с элементами внутри этого контейнера
-    private get widgetContainer() {
-        return this.page.locator('[id="3snet-frame"]').contentFrame().locator('body'); 
+
+    // iframe с превью в полном размере
+    private get fullSizeIframe() {
+        return this.page.locator('iframe[id="3snet-frame"][width="100%"][height="100%"]');
     }
-//метод для перехода на страницу виджета
+
     async goto() {
         await this.page.goto('/eventswidget/');
     }
-//метод для применения конфигурации виджета, который включает в себя выбор категорий, стран и размеров виджета
+
     async applyConfig(config: WidgetConfig) {
         await this.selectCategories();
         await this.selectAllCountries();
         await this.setSize();
     }
-//методы для взаимодействия с элементами страницы, которые выполняют конкретные действия, такие как выбор категорий, стран и размеров виджета    
+
     private async selectCategories() {
         await this.page.locator('.checkselect-over').first().click();
         await this.page.getByText('Igaming', { exact: true }).click();
         await this.page.getByText('Affiliate').click();
     }
-//метод для выбора всех стран, который открывает выпадающий список стран и выбирает опцию "Выбрать все"
+
     private async selectAllCountries() {
         await this.page.getByText('Выберите страны').click();
         await this.page.locator('.checkselect-over').nth(1).click();
         await this.page.getByText('Выбрать все').nth(1).click();
     }
-//метод для установки размера виджета, который кликает по опциям для установки ширины и высоты виджета на всю ширину контейнера и всю высоту блока соответственно
+
     async setSize() {
         await this.page.getByText('на всю ширину контейнера').click();
         await this.page.getByText('на всю высоту блока').click();
+    }
 
-    }
-//метод для генерации превью виджета, который кликает по кнопке "Сгенерировать превью" для отображения виджета с примененными настройками
+    // генерируем превью и ждём, пока кнопка перестанет быть "Загрузка..."
     async generatePreview() {
-        await this.page.getByRole('button', { name: 'Сгенерировать превью' }).click();
+        const button = this.page.getByRole('button', { name: 'Сгенерировать превью' });
+        await button.click();
+        await expect(button).toBeEnabled(); // страница сама включает её после load iframe
     }
-//метод для проверки видимости виджета, который использует локатор для контейнера виджета и проверяет, что он видим на странице
+
+    // ждём, пока в #preview появится iframe с width/height = 100%
+    async waitForPreviewLoaded() {
+        await this.fullSizeIframe.waitFor({ timeout: 15000 });
+    }
+
     async expectWidgetVisible() {
-        await expect(this.widgetContainer).toBeVisible();
+        await this.waitForPreviewLoaded();
+        await expect(this.fullSizeIframe).toBeVisible();
     }
-//метод для снятия скриншота виджета, который сохраняет изображение виджета в папке "screenshots" с именем "widget-final.png"    
+
     async takeScreenshot() {
-        await this.page.screenshot({path: 'screenshots/widget-final.png', fullPage: true});
+        await this.page.screenshot({ path: 'screenshots/widget-final.png', fullPage: true });
     }
 }

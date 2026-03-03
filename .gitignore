@@ -9,4 +9,5 @@ node_modules/
 allure-results/
 screenshots/
 allure-report/
+allure-report-history/
 videos/
