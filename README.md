@@ -36,8 +36,8 @@
 1. git clone https://github.com/lumediluna/task
 2. cd task
 3. npm install -D @playwright/test allure-playwright allure-commandline
-4. npm run test:report
-5. npm start для запуска через UI
+4. npm run test:report для запуска с генерацией отчета
+5. npm start для запуска через UI, с генерацией отчета
 
 ## 🔍 Описание теста
 
