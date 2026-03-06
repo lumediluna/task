@@ -37,7 +37,7 @@
 2. cd task
 3. npm install -D @playwright/test allure-playwright allure-commandline
 4. npm run test:report
-
+5. npm start для запуска через UI
 
 ## 🔍 Описание теста
 

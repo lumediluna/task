@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "engines": {
-  "node": "20.20.0"
-  },        
-    "scripts": {
+    "node": "20.20.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/web/server.js",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "test:debug": "playwright test --debug",
@@ -20,18 +22,26 @@
   "description": "",
   "devDependencies": {
     "@playwright/test": "^1.58.2",
+    "@types/express": "^5.0.6",
     "@types/node": "^25.3.3",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
     "allure-commandline": "^2.37.0",
-    "allure-playwright": "^3.5.0",
+    "allure-playwright": "^3.6.0",
     "eslint": "^9.39.3",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-playwright": "^2.9.0",
     "eslint-plugin-react": "^7.37.5",
     "jiti": "^2.6.1",
     "prettier": "^3.8.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.1"
+  },
+  "dependencies": {
+    "ejs": "^5.0.1",
+    "express": "^5.2.1",
+    "open": "^11.0.0",
+    "sqlite3": "^5.1.7"
   }
-  
 }

@@ -11,3 +11,6 @@ screenshots/
 allure-report/
 allure-report-history/
 videos/
+*.js
+allure-results/
+allure-history/
