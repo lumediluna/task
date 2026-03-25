@@ -1,14 +1,13 @@
-FROM mcr.microsoft.com/playwright:v1.42.1-jammy
+FROM node:lts
 
 WORKDIR /app
 
-# Копируем только зависимости — для кэширования
 COPY package.json package-lock.json ./
+RUN npm ci
 
-# Устанавливаем зависимости без лишнего
-RUN npm ci && npm cache clean --force
+# Устанавливаем браузеры Playwright + зависимости
+RUN npx playwright install --with-deps
 
-# Копируем остальной код
 COPY . .
 
-CMD ["npm", "test"]
+CMD ["npm", "start"]
